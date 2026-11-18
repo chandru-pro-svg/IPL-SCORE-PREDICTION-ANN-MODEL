@@ -51,6 +51,7 @@ def team_color(name):
 
 
 # ------------------------------------------------------------
+# ------------------------------------------------------------
 # 2. CUSTOM CSS  (the professional look)
 # ------------------------------------------------------------
 st.markdown(
@@ -58,7 +59,29 @@ st.markdown(
     <style>
     /* clean up default Streamlit items but keep the sidebar button */
     #MainMenu, footer, [data-testid="stToolbar"] {display: none;}
-    header[data-testid="stHeader"] {background: transparent;}
+    header[data-testid="stHeader"] {
+        background: transparent !important;
+        visibility: visible !important;
+    }
+
+    /* keep the '>>' reopen sidebar button always visible & highlighted */
+    [data-testid="collapsedControl"],
+    [data-testid="stSidebarCollapsedControl"] {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        z-index: 999999 !important;
+        background: rgba(28, 37, 65, 0.95) !important;
+        border: 1px solid #FF9F1C !important;
+        border-radius: 10px !important;
+        padding: 4px !important;
+        margin: 8px !important;
+    }
+    [data-testid="collapsedControl"] svg,
+    [data-testid="stSidebarCollapsedControl"] svg {
+        fill: #FF9F1C !important;
+        color: #FF9F1C !important;
+    }
 
     /* use the full width of the screen */
     .block-container {padding: 1.2rem 2.5rem 2rem 2.5rem; max-width: 100%;}
