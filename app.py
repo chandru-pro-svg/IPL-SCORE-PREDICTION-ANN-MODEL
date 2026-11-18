@@ -224,6 +224,11 @@ def predict_many(rows):
 # 5. SIDEBAR  (all the inputs live here)
 # ------------------------------------------------------------
 with st.sidebar:
+    st.sidebar.markdown(
+    """
+    ⭐ **Like this project?** [![GitHub stars](https://img.shields.io/github/stars/chandru-pro-svg/IPL-SCORE-PREDICTION-ANN-MODEL?style=social)](https://github.com/chandru-pro-svg/IPL-SCORE-PREDICTION-ANN-MODEL)
+    """
+)
     st.markdown('<div class="side-title">🏏 IPL Predictor</div>', unsafe_allow_html=True)
     st.markdown('<div class="side-sub">Set the match situation below</div>', unsafe_allow_html=True)
 
