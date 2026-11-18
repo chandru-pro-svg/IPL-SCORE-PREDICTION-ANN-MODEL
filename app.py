@@ -51,46 +51,45 @@ def team_color(name):
 
 
 # ------------------------------------------------------------
-# ------------------------------------------------------------
 # 2. CUSTOM CSS  (the professional look)
 # ------------------------------------------------------------
 st.markdown(
     """
     <style>
-    /* clean up default Streamlit items but keep the sidebar button */
+    /* clean up default Streamlit items */
     #MainMenu, footer, [data-testid="stToolbar"] {display: none;}
     header[data-testid="stHeader"] {
         background: transparent !important;
         visibility: visible !important;
     }
 
-    /* keep the '>>' reopen sidebar button always visible & highlighted */
-    [data-testid="collapsedControl"],
-    [data-testid="stSidebarCollapsedControl"] {
-        display: flex !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        z-index: 999999 !important;
-        background: rgba(28, 37, 65, 0.95) !important;
-        border: 1px solid #FF9F1C !important;
-        border-radius: 10px !important;
-        padding: 4px !important;
-        margin: 8px !important;
-    }
-    [data-testid="collapsedControl"] svg,
-    [data-testid="stSidebarCollapsedControl"] svg {
-        fill: #FF9F1C !important;
-        color: #FF9F1C !important;
-    }
-
     /* use the full width of the screen */
     .block-container {padding: 1.2rem 2.5rem 2rem 2.5rem; max-width: 100%;}
 
-    /* ---------- sidebar ---------- */
+    /* ---------- sidebar (LOCKED OPEN & CLOSE BUTTON HIDDEN) ---------- */
     section[data-testid="stSidebar"] {
         background: linear-gradient(180deg, #111A3A 0%, #0B132B 100%);
         border-right: 1px solid #26335F;
+        transform: translateX(0px) !important;
+        visibility: visible !important;
+        min-width: 310px !important;
+        max-width: 310px !important;
     }
+    section[data-testid="stSidebar"][aria-expanded="false"] {
+        margin-left: 0px !important;
+        transform: translateX(0px) !important;
+    }
+    /* Hide the '<' close arrow inside the sidebar so nobody can click it */
+    [data-testid="stSidebarCollapseButton"],
+    [data-testid="collapsedControl"],
+    [data-testid="stSidebarCollapsedControl"],
+    section[data-testid="stSidebar"] button[kind="header"],
+    section[data-testid="stSidebar"] button[kind="headerNoPadding"] {
+        display: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+    }
+
     .side-title {
         font-size: 1.5rem; font-weight: 800; color: #FF9F1C; margin-bottom: 0;
     }
@@ -248,10 +247,10 @@ def predict_many(rows):
 # ------------------------------------------------------------
 with st.sidebar:
     st.sidebar.markdown(
-    """
-    ⭐ **Like this project?** [![GitHub stars](https://img.shields.io/github/stars/chandru-pro-svg/IPL-SCORE-PREDICTION-ANN-MODEL?style=social)](https://github.com/chandru-pro-svg/IPL-SCORE-PREDICTION-ANN-MODEL)
-    """
-)
+        """
+        ⭐ **Like this project?** [![GitHub stars](https://img.shields.io/github/stars/chandru-pro-svg/IPL-SCORE-PREDICTION-ANN-MODEL?style=social)](https://github.com/chandru-pro-svg/IPL-SCORE-PREDICTION-ANN-MODEL)
+        """
+    )
     st.markdown('<div class="side-title">🏏 IPL Predictor</div>', unsafe_allow_html=True)
     st.markdown('<div class="side-sub">Set the match situation below</div>', unsafe_allow_html=True)
 
