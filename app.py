@@ -1,6 +1,3 @@
-Here is your complete `app.py` code with all your original logic intact, plus the added balloon effects, toast notifications, high-score snow effect, and smooth CSS pop-in/glow animations on the **Predicted Final Score** and **Match Outlook** cards:
-
-```python
 # =============================================================
 #  IPL Score Predictor  -  Professional Streamlit Dashboard
 #  Model : ANN (ipl_ann_model.keras)  |  Task : predict final score
@@ -510,5 +507,3 @@ st.markdown(
     "<p style='text-align:center; color:#6B7BA0; margin-top:2rem;'>Built with Streamlit & TensorFlow • IPL ANN Score Predictor</p>",
     unsafe_allow_html=True,
 )
-
-```
