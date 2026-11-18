@@ -1,3 +1,6 @@
+Here is your complete `app.py` code with all your original logic intact, plus the added balloon effects, toast notifications, high-score snow effect, and smooth CSS pop-in/glow animations on the **Predicted Final Score** and **Match Outlook** cards:
+
+```python
 # =============================================================
 #  IPL Score Predictor  -  Professional Streamlit Dashboard
 #  Model : ANN (ipl_ann_model.keras)  |  Task : predict final score
@@ -6,6 +9,7 @@
 # =============================================================
 import os
 import pickle
+import time
 
 import numpy as np
 import pandas as pd
@@ -51,7 +55,7 @@ def team_color(name):
 
 
 # ------------------------------------------------------------
-# 2. CUSTOM CSS  (the professional look)
+# 2. CUSTOM CSS  (the professional look + special animations)
 # ------------------------------------------------------------
 st.markdown(
     """
@@ -145,11 +149,41 @@ st.markdown(
     .stat .v {font-size: 1.7rem; font-weight: 800; color: white;}
     .stat .l {font-size: .8rem; color: #A9B8D0; letter-spacing: .5px;}
 
+    /* ---------- special effects animations ---------- */
+    @keyframes popInGlow {
+        0% {
+            transform: scale(0.92);
+            opacity: 0;
+            box-shadow: 0 0 0px rgba(0, 176, 155, 0);
+        }
+        70% {
+            transform: scale(1.03);
+            box-shadow: 0 0 35px rgba(150, 201, 61, 0.75);
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+            box-shadow: 0 10px 30px rgba(0, 176, 155, 0.35);
+        }
+    }
+
+    @keyframes slideInRight {
+        0% {
+            transform: translateX(25px);
+            opacity: 0;
+        }
+        100% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
     /* ---------- prediction card ---------- */
     .pred {
         background: linear-gradient(135deg, #00B09B 0%, #96C93D 100%);
         border-radius: 22px; padding: 1.8rem; text-align: center;
         box-shadow: 0 10px 30px rgba(0,176,155,.35); height: 100%;
+        animation: popInGlow 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
     .pred .label {color: #F0FFF4; letter-spacing: 3px; font-size: .95rem; font-weight: 600;}
     .pred .score {color: white; font-size: 5rem; font-weight: 900; line-height: 1.05;}
@@ -158,6 +192,7 @@ st.markdown(
     .compare {
         background: #1C2541; border: 1px solid #2E3D6B; border-radius: 20px;
         padding: 1.4rem 1.6rem; height: 100%;
+        animation: slideInRight 0.6s ease-out forwards;
     }
     .compare h4 {color: #FF9F1C; margin: 0 0 .8rem 0; letter-spacing: 1px;}
     .row {display: flex; justify-content: space-between; padding: .45rem 0;
@@ -291,10 +326,22 @@ inputs = (bat_team, bowl_team, venue, runs, wickets, overs, runs_last_5, wickets
 # 6. RUN THE PREDICTION WHEN THE BUTTON IS CLICKED
 # ------------------------------------------------------------
 if predict_clicked and not errors:
-    with st.spinner("The ANN is calculating..."):
+    with st.spinner("🏏 The ANN is calculating the final projection..."):
+        time.sleep(0.5)
         score = float(predict_many([inputs])[0])
-    st.session_state["result"] = {"inputs": inputs, "score": max(int(round(score)), runs)}
+        final_predicted_score = max(int(round(score)), runs)
+    
+    st.session_state["result"] = {"inputs": inputs, "score": final_predicted_score}
+    
+    # 1. Trigger floating balloons across the screen
     st.balloons()
+    
+    # 2. Trigger pop-up toast alert in the top-right corner
+    st.toast(f"🏏 Prediction Ready! Projected Score: {final_predicted_score}", icon="🔥")
+    
+    # 3. Extra snow celebration if it's a massive 200+ score
+    if final_predicted_score >= 200:
+        st.snow()
 
 result = st.session_state.get("result")
 result_is_fresh = result is not None and result["inputs"] == inputs
@@ -463,3 +510,5 @@ st.markdown(
     "<p style='text-align:center; color:#6B7BA0; margin-top:2rem;'>Built with Streamlit & TensorFlow • IPL ANN Score Predictor</p>",
     unsafe_allow_html=True,
 )
+
+```
