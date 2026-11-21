@@ -53,19 +53,21 @@ def team_color(name):
 
 # ------------------------------------------------------------
 # ------------------------------------------------------------
-# 2. CUSTOM CSS  (Responsive across Mobile, Tablet & Desktop)
+# ------------------------------------------------------------
+# 2. CUSTOM CSS  (Fully Responsive: Mobile, Tablet & Desktop)
 # ------------------------------------------------------------
 st.markdown(
     """
     <style>
-    /* clean up default Streamlit items */
-    #MainMenu, footer, [data-testid="stToolbar"] {display: none;}
+    /* Clean up default Streamlit menu/footer, KEEP header visible for mobile toggle */
+    #MainMenu, footer, [data-testid="stToolbar"] {display: none !important;}
     header[data-testid="stHeader"] {
         background: transparent !important;
         visibility: visible !important;
+        height: 2.8rem !important;
     }
 
-    /* use the full width of the screen */
+    /* Desktop default container padding */
     .block-container {
         padding: 1.2rem 2.5rem 2rem 2.5rem;
         max-width: 100%;
@@ -92,11 +94,8 @@ st.markdown(
         [data-testid="stSidebarCollapseButton"],
         [data-testid="collapsedControl"],
         [data-testid="stSidebarCollapsedControl"],
-        section[data-testid="stSidebar"] button[kind="header"],
-        section[data-testid="stSidebar"] button[kind="headerNoPadding"] {
+        [data-testid="stExpandSidebarButton"] {
             display: none !important;
-            visibility: hidden !important;
-            pointer-events: none !important;
         }
     }
 
@@ -156,33 +155,15 @@ st.markdown(
     .stat .v {font-size: 1.7rem; font-weight: 800; color: white;}
     .stat .l {font-size: .8rem; color: #A9B8D0; letter-spacing: .5px;}
 
-    /* ---------- special effects animations ---------- */
+    /* ---------- animations ---------- */
     @keyframes popInGlow {
-        0% {
-            transform: scale(0.92);
-            opacity: 0;
-            box-shadow: 0 0 0px rgba(0, 176, 155, 0);
-        }
-        70% {
-            transform: scale(1.03);
-            box-shadow: 0 0 35px rgba(150, 201, 61, 0.75);
-        }
-        100% {
-            transform: scale(1);
-            opacity: 1;
-            box-shadow: 0 10px 30px rgba(0, 176, 155, 0.35);
-        }
+        0% { transform: scale(0.92); opacity: 0; box-shadow: 0 0 0px rgba(0, 176, 155, 0); }
+        70% { transform: scale(1.03); box-shadow: 0 0 35px rgba(150, 201, 61, 0.75); }
+        100% { transform: scale(1); opacity: 1; box-shadow: 0 10px 30px rgba(0, 176, 155, 0.35); }
     }
-
     @keyframes slideInRight {
-        0% {
-            transform: translateX(25px);
-            opacity: 0;
-        }
-        100% {
-            transform: translateX(0);
-            opacity: 1;
-        }
+        0% { transform: translateX(25px); opacity: 0; }
+        100% { transform: translateX(0); opacity: 1; }
     }
 
     /* ---------- prediction card ---------- */
@@ -220,102 +201,113 @@ st.markdown(
         box-shadow: 0 8px 20px rgba(231, 29, 54, .4);
     }
     div.stButton > button:disabled {opacity: .4;}
-
-    /* tabs */
     button[data-baseweb="tab"] {font-size: 1rem; font-weight: 600;}
 
     /* ============================================================
-       MEDIA QUERIES FOR TABLETS & MOBILE DEVICES
+       MOBILE & TABLET RESPONSIVE RULES (<= 768px)
        ============================================================ */
-
-    /* Tablets & Small Laptops (max-width: 1024px) */
-    @media (max-width: 1024px) {
-        .block-container {
-            padding: 1rem 1.5rem 2rem 1.5rem;
-        }
-        .hero h1 {font-size: 1.75rem;}
-        .sb-score .big {font-size: 2.6rem;}
-        .pred .score {font-size: 4rem;}
-    }
-
-    /* Mobile Phones (max-width: 768px) */
     @media (max-width: 768px) {
+        /* Remove huge empty top gap on mobile */
         .block-container {
-            padding: 3.2rem 1rem 1.5rem 1rem !important;
+            padding: 2.6rem 0.85rem 1.5rem 0.85rem !important;
         }
 
-        /* Make the mobile sidebar toggle arrow clearly visible */
+        /* FORCE SHOW & STYLE THE MOBILE SIDEBAR OPEN BUTTON (ALL STREAMLIT VERSIONS) */
+        header[data-testid="stHeader"] button,
         [data-testid="collapsedControl"],
-        [data-testid="stSidebarCollapsedControl"] {
-            display: flex !important;
+        [data-testid="stSidebarCollapsedControl"],
+        [data-testid="stExpandSidebarButton"] {
+            display: inline-flex !important;
             visibility: visible !important;
-            background-color: #FF9F1C !important;
-            color: #0B132B !important;
-            border-radius: 8px !important;
-            top: 0.6rem !important;
-            left: 0.6rem !important;
+            opacity: 1 !important;
+            background: linear-gradient(90deg, #FF9F1C, #E71D36) !important;
+            color: white !important;
+            border-radius: 10px !important;
+            padding: 0.35rem 0.7rem !important;
+            box-shadow: 0 4px 12px rgba(231, 29, 54, 0.4) !important;
+        }
+        /* Add helpful label next to arrow on mobile */
+        header[data-testid="stHeader"] button::after,
+        [data-testid="stExpandSidebarButton"]::after {
+            content: " Match Inputs";
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-left: 0.35rem;
+            color: white;
         }
 
-        /* Hero compact layout */
+        /* Compact Hero Banner */
         .hero {
-            padding: 1.2rem;
+            padding: 1rem 1.1rem;
+            border-radius: 16px;
+            margin-bottom: 0.8rem;
+            gap: 0.6rem;
+        }
+        .hero h1 {font-size: 1.35rem;}
+        .hero p {font-size: 0.82rem; margin-top: 0.2rem;}
+        .pill {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.6rem;
+            margin: 0.15rem 0.25rem 0.15rem 0;
+        }
+
+        /* COMPACT 3-COLUMN MOBILE SCOREBOARD (Fits in 1 view!) */
+        .scoreboard {
+            display: grid !important;
+            grid-template-columns: 1fr auto 1fr !important;
+            align-items: center !important;
+            padding: 1rem 0.7rem !important;
+            gap: 0.4rem !important;
             border-radius: 16px;
         }
-        .hero h1 {font-size: 1.45rem;}
-        .hero p {font-size: 0.88rem;}
-        .pill {
-            font-size: 0.72rem;
-            padding: 0.25rem 0.65rem;
-        }
-
-        /* Scoreboard mobile stacking */
-        .scoreboard {
-            flex-direction: column;
-            padding: 1.2rem 1rem;
-            text-align: center;
-            gap: 0.8rem;
-        }
         .sb-team {
-            min-width: unset;
-            width: 100%;
+            min-width: unset !important;
         }
         .sb-badge {
-            font-size: 1.3rem;
-            padding: 0.4rem 0.9rem;
+            font-size: 1.1rem;
+            padding: 0.35rem 0.7rem;
+            border-radius: 10px;
         }
-        .sb-score .big {font-size: 2.5rem;}
-        .sb-score .ov {font-size: 0.95rem;}
-        .sb-vs {font-size: 1rem;}
+        .sb-name {
+            font-size: 0.7rem;
+            line-height: 1.2;
+            margin-top: 0.3rem;
+        }
+        .sb-score .big {font-size: 2rem;}
+        .sb-score .ov {font-size: 0.82rem;}
+        .sb-score .venue {font-size: 0.68rem; margin-top: 0.2rem;}
+        .sb-vs {display: none !important;} /* Hide VS on mobile to keep 3 clean columns */
 
-        /* Stat cards */
-        .stat {padding: 0.75rem;}
-        .stat .v {font-size: 1.4rem;}
-        .stat .l {font-size: 0.72rem;}
+        /* 2-Column Grid for Stat Cards on Mobile instead of 5 tall stacked boxes */
+        [data-testid="stHorizontalBlock"] {
+            display: grid !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 0.5rem !important;
+        }
+        .stat {
+            padding: 0.65rem 0.5rem;
+            margin-bottom: 0;
+        }
+        .stat .v {font-size: 1.3rem;}
+        .stat .l {font-size: 0.68rem;}
 
-        /* Prediction & Outlook cards */
+        /* Prediction & Outlook cards stack cleanly (1 column) */
         .pred {
-            padding: 1.4rem 1rem;
-            margin-bottom: 1rem;
+            padding: 1.2rem 0.8rem;
+            margin-bottom: 0.6rem;
         }
-        .pred .label {font-size: 0.8rem; letter-spacing: 2px;}
-        .pred .score {font-size: 3.6rem;}
-        .pred .sub {font-size: 0.88rem;}
+        .pred .label {font-size: 0.78rem; letter-spacing: 2px;}
+        .pred .score {font-size: 3.4rem;}
+        .pred .sub {font-size: 0.85rem;}
 
-        .compare {padding: 1.1rem;}
-        .row {font-size: 0.9rem;}
+        .compare {padding: 1rem;}
+        .row {font-size: 0.85rem;}
 
-        /* Tabs fit better on narrow screens */
+        /* Tabs */
         button[data-baseweb="tab"] {
-            font-size: 0.85rem;
-            padding: 0.4rem 0.6rem;
+            font-size: 0.82rem;
+            padding: 0.35rem 0.5rem;
         }
-    }
-
-    /* Extra Small Phones (max-width: 400px) */
-    @media (max-width: 400px) {
-        .hero h1 {font-size: 1.25rem;}
-        .sb-score .big {font-size: 2.1rem;}
-        .pred .score {font-size: 3rem;}
     }
     </style>
     """,
