@@ -19,7 +19,7 @@ st.set_page_config(
     page_title="IPL Score Predictor | ANN",
     page_icon="🏏",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="auto",
 )
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -52,7 +52,8 @@ def team_color(name):
 
 
 # ------------------------------------------------------------
-# 2. CUSTOM CSS  (the professional look + special animations)
+# ------------------------------------------------------------
+# 2. CUSTOM CSS  (Responsive across Mobile, Tablet & Desktop)
 # ------------------------------------------------------------
 st.markdown(
     """
@@ -65,30 +66,38 @@ st.markdown(
     }
 
     /* use the full width of the screen */
-    .block-container {padding: 1.2rem 2.5rem 2rem 2.5rem; max-width: 100%;}
+    .block-container {
+        padding: 1.2rem 2.5rem 2rem 2.5rem;
+        max-width: 100%;
+    }
 
-    /* ---------- sidebar (LOCKED OPEN & CLOSE BUTTON HIDDEN) ---------- */
+    /* ---------- sidebar base styling ---------- */
     section[data-testid="stSidebar"] {
         background: linear-gradient(180deg, #111A3A 0%, #0B132B 100%);
         border-right: 1px solid #26335F;
-        transform: translateX(0px) !important;
-        visibility: visible !important;
-        min-width: 310px !important;
-        max-width: 310px !important;
     }
-    section[data-testid="stSidebar"][aria-expanded="false"] {
-        margin-left: 0px !important;
-        transform: translateX(0px) !important;
-    }
-    /* Hide the '<' close arrow inside the sidebar so nobody can click it */
-    [data-testid="stSidebarCollapseButton"],
-    [data-testid="collapsedControl"],
-    [data-testid="stSidebarCollapsedControl"],
-    section[data-testid="stSidebar"] button[kind="header"],
-    section[data-testid="stSidebar"] button[kind="headerNoPadding"] {
-        display: none !important;
-        visibility: hidden !important;
-        pointer-events: none !important;
+
+    /* LOCK SIDEBAR ONLY ON DESKTOP (> 768px) */
+    @media (min-width: 769px) {
+        section[data-testid="stSidebar"] {
+            transform: translateX(0px) !important;
+            visibility: visible !important;
+            min-width: 310px !important;
+            max-width: 310px !important;
+        }
+        section[data-testid="stSidebar"][aria-expanded="false"] {
+            margin-left: 0px !important;
+            transform: translateX(0px) !important;
+        }
+        [data-testid="stSidebarCollapseButton"],
+        [data-testid="collapsedControl"],
+        [data-testid="stSidebarCollapsedControl"],
+        section[data-testid="stSidebar"] button[kind="header"],
+        section[data-testid="stSidebar"] button[kind="headerNoPadding"] {
+            display: none !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
     }
 
     .side-title {
@@ -113,7 +122,7 @@ st.markdown(
     .pill {
         display: inline-block; background: rgba(255,255,255,.18);
         color: white; padding: .35rem .9rem; border-radius: 999px;
-        font-size: .85rem; font-weight: 600; margin-left: .4rem;
+        font-size: .85rem; font-weight: 600; margin: .2rem .4rem .2rem 0;
         border: 1px solid rgba(255,255,255,.3);
     }
 
@@ -142,6 +151,7 @@ st.markdown(
         background: #1C2541; border: 1px solid #2E3D6B;
         border-top: 4px solid #FF9F1C; border-radius: 14px;
         padding: .9rem 1rem; text-align: center;
+        margin-bottom: 0.6rem;
     }
     .stat .v {font-size: 1.7rem; font-weight: 800; color: white;}
     .stat .l {font-size: .8rem; color: #A9B8D0; letter-spacing: .5px;}
@@ -213,11 +223,104 @@ st.markdown(
 
     /* tabs */
     button[data-baseweb="tab"] {font-size: 1rem; font-weight: 600;}
+
+    /* ============================================================
+       MEDIA QUERIES FOR TABLETS & MOBILE DEVICES
+       ============================================================ */
+
+    /* Tablets & Small Laptops (max-width: 1024px) */
+    @media (max-width: 1024px) {
+        .block-container {
+            padding: 1rem 1.5rem 2rem 1.5rem;
+        }
+        .hero h1 {font-size: 1.75rem;}
+        .sb-score .big {font-size: 2.6rem;}
+        .pred .score {font-size: 4rem;}
+    }
+
+    /* Mobile Phones (max-width: 768px) */
+    @media (max-width: 768px) {
+        .block-container {
+            padding: 3.2rem 1rem 1.5rem 1rem !important;
+        }
+
+        /* Make the mobile sidebar toggle arrow clearly visible */
+        [data-testid="collapsedControl"],
+        [data-testid="stSidebarCollapsedControl"] {
+            display: flex !important;
+            visibility: visible !important;
+            background-color: #FF9F1C !important;
+            color: #0B132B !important;
+            border-radius: 8px !important;
+            top: 0.6rem !important;
+            left: 0.6rem !important;
+        }
+
+        /* Hero compact layout */
+        .hero {
+            padding: 1.2rem;
+            border-radius: 16px;
+        }
+        .hero h1 {font-size: 1.45rem;}
+        .hero p {font-size: 0.88rem;}
+        .pill {
+            font-size: 0.72rem;
+            padding: 0.25rem 0.65rem;
+        }
+
+        /* Scoreboard mobile stacking */
+        .scoreboard {
+            flex-direction: column;
+            padding: 1.2rem 1rem;
+            text-align: center;
+            gap: 0.8rem;
+        }
+        .sb-team {
+            min-width: unset;
+            width: 100%;
+        }
+        .sb-badge {
+            font-size: 1.3rem;
+            padding: 0.4rem 0.9rem;
+        }
+        .sb-score .big {font-size: 2.5rem;}
+        .sb-score .ov {font-size: 0.95rem;}
+        .sb-vs {font-size: 1rem;}
+
+        /* Stat cards */
+        .stat {padding: 0.75rem;}
+        .stat .v {font-size: 1.4rem;}
+        .stat .l {font-size: 0.72rem;}
+
+        /* Prediction & Outlook cards */
+        .pred {
+            padding: 1.4rem 1rem;
+            margin-bottom: 1rem;
+        }
+        .pred .label {font-size: 0.8rem; letter-spacing: 2px;}
+        .pred .score {font-size: 3.6rem;}
+        .pred .sub {font-size: 0.88rem;}
+
+        .compare {padding: 1.1rem;}
+        .row {font-size: 0.9rem;}
+
+        /* Tabs fit better on narrow screens */
+        button[data-baseweb="tab"] {
+            font-size: 0.85rem;
+            padding: 0.4rem 0.6rem;
+        }
+    }
+
+    /* Extra Small Phones (max-width: 400px) */
+    @media (max-width: 400px) {
+        .hero h1 {font-size: 1.25rem;}
+        .sb-score .big {font-size: 2.1rem;}
+        .pred .score {font-size: 3rem;}
+    }
     </style>
     """,
     unsafe_allow_html=True,
 )
-
 
 # ------------------------------------------------------------
 # 3. LOAD MODEL, SCALER, ENCODERS  (cached = loads only once)
